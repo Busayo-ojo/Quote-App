@@ -505,7 +505,7 @@ function App() {
             <h1 className="text-4xl md:text-6xl font-bold text-white mb-2 tracking-tight">
               Daily Wisdom Pro
             </h1>
-            <p className="text-white/80 text-lg">AI-Powered Quote Experience</p>
+            <p className="text-white/80 text-lg">Daily Inspirational Quotes</p>
           </div>
 
           <div className="flex items-center gap-4">
