@@ -1,6 +1,8 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react'
 import { Heart, Share2, Search, Palette, Calendar, BookOpen, Lightbulb, Target, Smile, Brain, Star, RefreshCw, Copy, Check, TrendingUp, Users, Zap, Settings, Download, Bell, MessageSquare, BarChart3, Sparkles, User, LogOut, Moon, Sun } from 'lucide-react';
-import './App.css';
+
+import './App.css'
+
 
 function App() {
   // Core State
@@ -164,13 +166,13 @@ function App() {
   useEffect(() => {
     const randomQuote = quotes[Math.floor(Math.random() * quotes.length)];
     setCurrentQuote(randomQuote);
-    
+
     // Load user data
     const savedFavorites = localStorage.getItem('quoteAppFavorites');
     if (savedFavorites) {
       setFavorites(JSON.parse(savedFavorites));
     }
-    
+
     // Initialize analytics
     initializeAnalytics();
     loadUserProgress();
@@ -187,7 +189,7 @@ function App() {
     const todayReads = history.filter(h => new Date(h.date).toDateString() === today).length;
     setTodayCount(todayReads);
     setQuoteHistory(history);
-    
+
     // Calculate category stats
     const stats = {};
     history.forEach(h => {
@@ -205,11 +207,11 @@ function App() {
 
   const simulateAIGeneration = async (prompt) => {
     if (!prompt.trim()) return;
-    
+
     setAiGenerating(true);
     // Simulate API call delay
     await new Promise(resolve => setTimeout(resolve, 2000));
-    
+
     const aiQuotes = [
       {
         id: Date.now(),
@@ -245,7 +247,7 @@ function App() {
         readCount: 1
       }
     ];
-    
+
     const newQuote = aiQuotes[Math.floor(Math.random() * aiQuotes.length)];
     setCurrentQuote(newQuote);
     setAiGenerating(false);
@@ -256,7 +258,7 @@ function App() {
   const recordQuoteRead = (quote) => {
     const today = new Date().toDateString();
     const history = JSON.parse(localStorage.getItem('quoteHistory') || '[]');
-    
+
     history.push({
       quoteId: quote.id,
       text: quote.text,
@@ -265,30 +267,30 @@ function App() {
       date: new Date().toISOString(),
       sentiment: quote.sentiment || 'neutral'
     });
-    
+
     localStorage.setItem('quoteHistory', JSON.stringify(history));
-    
+
     // Update counters
     const todayReads = history.filter(h => new Date(h.date).toDateString() === today).length;
     setTodayCount(todayReads);
-    
+
     const newTotal = totalQuotesRead + 1;
     setTotalQuotesRead(newTotal);
     localStorage.setItem('totalQuotesRead', newTotal.toString());
-    
+
     // Update streak logic
     const yesterday = new Date();
     yesterday.setDate(yesterday.getDate() - 1);
-    const yesterdayReads = history.filter(h => 
+    const yesterdayReads = history.filter(h =>
       new Date(h.date).toDateString() === yesterday.toDateString()
     ).length;
-    
+
     if (todayReads === 1) {
       const newStreak = yesterdayReads > 0 ? readingStreak + 1 : 1;
       setReadingStreak(newStreak);
       localStorage.setItem('readingStreak', newStreak.toString());
     }
-    
+
     // Update category stats
     const stats = {};
     history.forEach(h => {
@@ -300,11 +302,11 @@ function App() {
   const analyzeSentiment = (quote) => {
     const positiveWords = ['love', 'great', 'beautiful', 'hope', 'success', 'happiness', 'joy', 'amazing', 'wonderful'];
     const negativeWords = ['dark', 'difficult', 'impossible', 'failure', 'pain', 'sad', 'hard'];
-    
+
     const text = quote.text.toLowerCase();
     const positiveCount = positiveWords.filter(word => text.includes(word)).length;
     const negativeCount = negativeWords.filter(word => text.includes(word)).length;
-    
+
     if (positiveCount > negativeCount) return 'positive';
     if (negativeCount > positiveCount) return 'challenging';
     return 'neutral';
@@ -319,7 +321,7 @@ function App() {
         do {
           newQuote = filtered[Math.floor(Math.random() * filtered.length)];
         } while (newQuote.id === currentQuote?.id && filtered.length > 1);
-        
+
         setCurrentQuote(newQuote);
         setQuoteSentiment(analyzeSentiment(newQuote));
         recordQuoteRead(newQuote);
@@ -330,19 +332,19 @@ function App() {
 
   const getFilteredQuotes = () => {
     let filtered = quotes;
-    
+
     if (selectedCategory !== 'all') {
       filtered = filtered.filter(quote => quote.category === selectedCategory);
     }
-    
+
     if (searchTerm) {
-      filtered = filtered.filter(quote => 
+      filtered = filtered.filter(quote =>
         quote.text.toLowerCase().includes(searchTerm.toLowerCase()) ||
         quote.author.toLowerCase().includes(searchTerm.toLowerCase()) ||
         quote.tags.some(tag => tag.toLowerCase().includes(searchTerm.toLowerCase()))
       );
     }
-    
+
     return filtered;
   };
 
@@ -399,7 +401,7 @@ function App() {
         <BarChart3 size={24} />
         Your Reading Analytics
       </h3>
-      
+
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
         <div className="bg-white/20 rounded-xl p-4 text-center">
           <div className="text-3xl font-bold text-white">{readingStreak}</div>
@@ -414,7 +416,7 @@ function App() {
           <div className="text-white/80 text-sm">Today's Goal</div>
         </div>
       </div>
-      
+
       {Object.keys(categoryStats).length > 0 && (
         <div className="bg-white/20 rounded-xl p-4">
           <h4 className="text-white font-semibold mb-3">Category Preferences</h4>
@@ -423,8 +425,8 @@ function App() {
               <span className="text-white/90 capitalize">{category}</span>
               <div className="flex items-center gap-2">
                 <div className="bg-white/30 rounded-full h-2 w-20">
-                  <div 
-                    className="bg-white rounded-full h-2 transition-all duration-500" 
+                  <div
+                    className="bg-white rounded-full h-2 transition-all duration-500"
                     style={{ width: `${(count / Math.max(...Object.values(categoryStats))) * 100}%` }}
                   ></div>
                 </div>
@@ -444,7 +446,7 @@ function App() {
         AI Quote Generator
       </h3>
       <p className="text-white/80 mb-4">Generate personalized quotes based on your interests or current mood.</p>
-      
+
       <div className="flex gap-3 mb-4">
         <input
           type="text"
@@ -472,7 +474,7 @@ function App() {
           )}
         </button>
       </div>
-      
+
       <div className="flex flex-wrap gap-2">
         {['motivation', 'creativity', 'resilience', 'success', 'mindfulness', 'courage'].map(topic => (
           <button
@@ -496,7 +498,7 @@ function App() {
   return (
     <div className={`min-h-screen ${themes[theme]} ${darkMode ? 'brightness-75' : ''} p-4 transition-all duration-1000`}>
       <div className="max-w-6xl mx-auto">
-        
+
         {/* Enhanced Header with User Info */}
         <div className="flex justify-between items-center mb-8">
           <div className="text-center flex-1">
@@ -505,7 +507,7 @@ function App() {
             </h1>
             <p className="text-white/80 text-lg">AI-Powered Quote Experience</p>
           </div>
-          
+
           <div className="flex items-center gap-4">
             <button
               onClick={() => setDarkMode(!darkMode)}
@@ -513,7 +515,7 @@ function App() {
             >
               {darkMode ? <Sun className="text-white" size={20} /> : <Moon className="text-white" size={20} />}
             </button>
-            
+
             <div className="bg-white/20 backdrop-blur-sm rounded-full px-4 py-2 flex items-center gap-2">
               <User className="text-white" size={16} />
               <span className="text-white text-sm">User #{Math.floor(Math.random() * 1000)}</span>
@@ -530,7 +532,7 @@ function App() {
             <Search size={20} />
             Search
           </button>
-          
+
           <button
             onClick={() => setShowAnalytics(!showAnalytics)}
             className="flex items-center gap-2 bg-white/20 backdrop-blur-sm text-white px-4 py-2 rounded-full hover:bg-white/30 transition-all duration-300"
@@ -538,7 +540,7 @@ function App() {
             <TrendingUp size={20} />
             Analytics
           </button>
-          
+
           <button
             onClick={() => alert('PWA Installation feature - In a real app, this would trigger the install prompt')}
             className="flex items-center gap-2 bg-white/20 backdrop-blur-sm text-white px-4 py-2 rounded-full hover:bg-white/30 transition-all duration-300"
@@ -546,7 +548,7 @@ function App() {
             <Download size={20} />
             Install App
           </button>
-          
+
           <div className="relative">
             <select
               value={theme}
@@ -591,11 +593,10 @@ function App() {
               <button
                 key={category.id}
                 onClick={() => setSelectedCategory(category.id)}
-                className={`flex items-center gap-2 px-4 py-2 rounded-full transition-all duration-300 ${
-                  selectedCategory === category.id
-                    ? 'bg-white text-gray-800 shadow-lg transform scale-105'
-                    : 'bg-white/20 backdrop-blur-sm text-white hover:bg-white/30 hover:scale-105'
-                }`}
+                className={`flex items-center gap-2 px-4 py-2 rounded-full transition-all duration-300 ${selectedCategory === category.id
+                  ? 'bg-white text-gray-800 shadow-lg transform scale-105'
+                  : 'bg-white/20 backdrop-blur-sm text-white hover:bg-white/30 hover:scale-105'
+                  }`}
               >
                 <Icon size={16} />
                 {category.name}
@@ -605,9 +606,8 @@ function App() {
         </div>
 
         {/* Enhanced Quote Card */}
-        <div className={`bg-white/10 backdrop-blur-lg rounded-3xl p-8 md:p-12 mb-8 border border-white/20 shadow-2xl transition-all duration-500 ${
-          isAnimating ? 'opacity-50 scale-95' : 'opacity-100 scale-100'
-        }`}>
+        <div className={`bg-white/10 backdrop-blur-lg rounded-3xl p-8 md:p-12 mb-8 border border-white/20 shadow-2xl transition-all duration-500 ${isAnimating ? 'opacity-50 scale-95' : 'opacity-100 scale-100'
+          }`}>
           <div className="text-center">
             {currentQuote.isAiGenerated && (
               <div className="inline-flex items-center gap-2 bg-gradient-to-r from-purple-500/20 to-pink-500/20 text-white px-4 py-2 rounded-full mb-4 border border-purple-400/30">
@@ -615,7 +615,7 @@ function App() {
                 <span className="text-sm font-medium">AI Generated</span>
               </div>
             )}
-            
+
             <div className="text-6xl text-white/30 mb-4">"</div>
             <blockquote className="text-2xl md:text-3xl lg:text-4xl text-white font-light leading-relaxed mb-6">
               {currentQuote.text}
@@ -623,7 +623,7 @@ function App() {
             <cite className="text-xl md:text-2xl text-white/80 font-medium">
               — {currentQuote.author}
             </cite>
-            
+
             {/* Enhanced Quote Metadata */}
             <div className="flex flex-wrap gap-2 justify-center mt-6 mb-4">
               {currentQuote.tags.map(tag => (
@@ -635,7 +635,7 @@ function App() {
                 </span>
               ))}
             </div>
-            
+
             {/* Quote Stats */}
             <div className="flex justify-center gap-6 mt-4 text-white/70 text-sm">
               {currentQuote.rating && (
@@ -669,19 +669,18 @@ function App() {
             <RefreshCw size={20} />
             New Quote
           </button>
-          
+
           <button
             onClick={() => toggleFavorite(currentQuote)}
-            className={`flex items-center gap-3 px-6 py-3 rounded-full transition-all duration-300 font-medium transform hover:scale-105 ${
-              isFavorite(currentQuote)
-                ? 'bg-red-500 text-white hover:bg-red-600'
-                : 'bg-white/20 backdrop-blur-sm text-white hover:bg-white/30'
-            }`}
+            className={`flex items-center gap-3 px-6 py-3 rounded-full transition-all duration-300 font-medium transform hover:scale-105 ${isFavorite(currentQuote)
+              ? 'bg-red-500 text-white hover:bg-red-600'
+              : 'bg-white/20 backdrop-blur-sm text-white hover:bg-white/30'
+              }`}
           >
             <Heart size={20} fill={isFavorite(currentQuote) ? 'currentColor' : 'none'} />
             {isFavorite(currentQuote) ? 'Favorited' : 'Favorite'}
           </button>
-          
+
           <button
             onClick={() => shareQuote(currentQuote)}
             className="flex items-center gap-3 bg-white/20 backdrop-blur-sm text-white px-6 py-3 rounded-full hover:bg-white/30 transition-all duration-300 font-medium transform hover:scale-105"
@@ -689,7 +688,7 @@ function App() {
             {copied ? <Check size={20} /> : <Share2 size={20} />}
             {copied ? 'Copied!' : 'Share'}
           </button>
-          
+
           <button
             onClick={() => alert('Community features would allow users to discuss this quote')}
             className="flex items-center gap-3 bg-white/20 backdrop-blur-sm text-white px-6 py-3 rounded-full hover:bg-white/30 transition-all duration-300 font-medium transform hover:scale-105"
@@ -731,13 +730,13 @@ function App() {
         <div className="bg-white/10 backdrop-blur-lg rounded-3xl p-6 border border-white/20 mb-8">
           <h3 className="text-xl font-bold text-white mb-4">Today's Reading Progress</h3>
           <div className="bg-white/20 rounded-full h-4 mb-2 overflow-hidden">
-            <div 
-              className="bg-gradient-to-r from-green-400 to-blue-500 h-full rounded-full transition-all duration-500" 
+            <div
+              className="bg-gradient-to-r from-green-400 to-blue-500 h-full rounded-full transition-all duration-500"
               style={{ width: `${Math.min((todayCount / readingGoal) * 100, 100)}%` }}
             ></div>
           </div>
           <p className="text-white/80 text-sm">
-            {todayCount} of {readingGoal} quotes read today 
+            {todayCount} of {readingGoal} quotes read today
             {todayCount >= readingGoal && " 🎉 Goal achieved!"}
           </p>
         </div>
