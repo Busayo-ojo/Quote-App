@@ -1,12 +1,47 @@
-# React + Vite
+# Quote App
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A React + Vite application built with Tailwind CSS for displaying and managing quotes.
 
-Currently, two official plugins are available:
+## Development
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+```bash
+npm install
+npm run dev
+```
 
-## Expanding the ESLint configuration
+## Deployment
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+This project is configured to deploy to GitHub Pages using GitHub Actions.
+
+### Setup Instructions:
+
+1. **Push your code to GitHub** (if you haven't already):
+
+   ```bash
+   git add .
+   git commit -m "Add GitHub Actions deployment"
+   git push origin main
+   ```
+
+2. **Enable GitHub Pages**:
+
+   - Go to your repository on GitHub
+   - Navigate to Settings → Pages
+   - Under "Source", select "GitHub Actions"
+   - The workflow will automatically deploy your app when you push to the main branch
+
+3. **Your app will be available at**: `https://[your-username].github.io/Quote-App/`
+
+### How it works:
+
+- The GitHub Action triggers on pushes to `main` or `master` branch
+- It builds your React app using `npm run build`
+- Deploys the built files to GitHub Pages
+- Your app will be automatically updated on each push
+
+## Technologies Used
+
+- React 19
+- Vite
+- Tailwind CSS
+- Lucide React (for icons)
